@@ -406,6 +406,47 @@ class FactorGraph {
     double upper_bound;
     return RunPSDD(-1e100, posteriors, additional_posteriors, value, &upper_bound);
   }
+  
+  
+  
+  
+  
+  int SolveLPMAPWithAD3(vector<double> *posteriors,
+                        vector<double> *additional_posteriors,
+                        double *value,
+                        double *upper_bound) {
+    return RunAD3(-1e100, posteriors, additional_posteriors, value, upper_bound);
+  }
+
+  int SolveExactMAPWithAD3(vector<double> *posteriors,
+                           vector<double> *additional_posteriors,
+                           double *value,
+                           double *upper_bound) {
+    double best_lower_bound = -1e100;
+    vector<bool> branched_variables(variables_.size(), false);
+    int depth = 0;
+    int status = RunBranchAndBound(0.0,
+                                   branched_variables,
+                                   depth,
+                                   posteriors,
+                                   additional_posteriors,
+                                   value,
+                                   &best_lower_bound,
+                                   upper_bound);
+    if (verbosity_ > 1) {
+      cout << "Solution value for AD3 ILP: " << *value << endl;
+    }
+    return status;
+  }
+
+  int SolveLPMAPWithPSDD(vector<double> *posteriors,
+                         vector<double> *additional_posteriors,
+                         double *value,
+                         double *upper_bound) {
+    // Add code here for tuning the stepsize.
+    return RunPSDD(-1e100, posteriors, additional_posteriors, value, upper_bound);
+  }
+  
 
  private:
   void ResetParametersAD3() {

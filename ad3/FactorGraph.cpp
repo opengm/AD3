@@ -729,13 +729,13 @@ int FactorGraph::RunBranchAndBound(double cumulative_value,
     return status;
   } else if (status == STATUS_INFEASIBLE) {
     *value = -1e100;
-    *best_upper_bound = -1e100;
+    *best_upper_bound = 1e100;
     return status;
   }
 
   if (max_branching_depth >= 0 && depth > max_branching_depth) {
     *value = -1e100;
-    *best_upper_bound = -1e100;
+    *best_upper_bound = 1e100;
     if (verbosity_ > 1) {
         cout << "Maximum depth exceeded." << endl;
     }
